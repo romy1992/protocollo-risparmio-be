@@ -3,14 +3,15 @@ package com.protocollo.risparmio.brk.service;
 import com.protocollo.risparmio.brk.entity.ContainerEntity;
 import com.protocollo.risparmio.brk.entity.UserContainerEntity;
 import com.protocollo.risparmio.brk.mapper.ContainerMapper;
+import com.protocollo.risparmio.brk.model.LoginRequest;
 import com.protocollo.risparmio.brk.model.UserContainerModel;
 import com.protocollo.risparmio.brk.repository.AuthRepository;
 import com.protocollo.risparmio.brk.repository.ContainerRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Optional;
@@ -23,6 +24,7 @@ public class AuthService {
   @Autowired AuthRepository authRepository;
   @Autowired ContainerRepository containerRepository;
   @Autowired ContainerMapper mapper;
+  @Autowired ContainerService containerService;
 
   public UserContainerModel insert(UserContainerModel model) {
     log.info("<<<<<<< Start Insert new User >>>>>>>");
@@ -54,13 +56,18 @@ public class AuthService {
     if (Objects.nonNull(model)) {
       // Delete User
       authRepository.deleteById(model.getIdUserContainer());
-      // TODO : Delete Container User
-      log.info("<<<<<<< Delete Container User {} >>>>>>>", email);
-
+      // Delete Container User
+      log.info("<<<<<<< Delete Containers User {} >>>>>>>", email);
+      containerService.deleteAllContainers(email);
       log.info("<<<<<<< End Delete User {} >>>>>>>", email);
       return true;
     }
     log.info("<<<<<<< Not found User {} >>>>>>>", email);
     return false;
+  }
+
+  public Boolean login(LoginRequest model) {
+    UserContainerEntity user = authRepository.findByEmail(model.getEmail());
+    return Objects.nonNull(user) && model.getPassword().equals(user.getPassword());
   }
 }
