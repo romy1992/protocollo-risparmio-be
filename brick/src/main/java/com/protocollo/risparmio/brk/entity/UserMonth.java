@@ -20,8 +20,9 @@ public class UserMonth {
   @Basic(optional = false)
   private UUID idUMonth;
 
-  @Column(name = "NAME")
-  private String name;
+  @Basic(optional = false)
+  @Column(name = "TITLE")
+  private String title;
 
   @Column(name = "NOTE")
   private String note;

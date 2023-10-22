@@ -5,11 +5,11 @@ import com.protocollo.risparmio.brk.service.ContainerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("api/container")
+@CrossOrigin(origins = {"http://localhost:3000"})
 public class ContainerController {
   @Autowired ContainerService containerService;
 
@@ -19,8 +19,21 @@ public class ContainerController {
   }
 
   @GetMapping("search/{codUser}")
-  public List<ContainerModel> search(@PathVariable(name = "codUser") String codUser) {
+  public ContainerModel search(@PathVariable(name = "codUser") String codUser) {
     return containerService.search(codUser);
+  }
+
+  /**
+   * Cerca i mesi IN LIKE
+   *
+   * @param codUser
+   * @param value
+   * @return
+   */
+  @GetMapping("searchInLike")
+  public ContainerModel searchInLike(
+      @RequestParam(name = "codUser") String codUser, @RequestParam(name = "value") String value) {
+    return containerService.searchMouthInLike(codUser, value);
   }
 
   @PutMapping("update")
