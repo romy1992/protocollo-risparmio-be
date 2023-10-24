@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("api/container")
-@CrossOrigin(origins = {"http://localhost:3000"})
+@CrossOrigin(origins = {"http://localhost:3000","https://protocollo-risparmio.netlify.app/"})
 public class ContainerController {
   @Autowired ContainerService containerService;
 
